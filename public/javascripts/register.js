@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     const formHandler = (() => {
-        const form = document.getElementById('passwordForm');
+        const form = document.getElementById('registerForm');
 
-        function handlePasswordSubmit(e) {
+        function handleSubmit(e) {
             e.preventDefault();
 
             errorHandler.clearError(); // Clear any previous error
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function init() {
-            form.addEventListener('submit', handlePasswordSubmit); // Add event listener
+            form.addEventListener('submit', handleSubmit); // Add event listener
         }
 
         return {

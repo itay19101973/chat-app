@@ -16,7 +16,9 @@
                         </div>
                     <% } %>
 
-                    <form action="/register-password" method="GET">
+
+
+                    <form action="/register-password" method="GET" id="registerForm">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input
@@ -31,6 +33,7 @@
                                     title="Email must be at least 3 characters before @ and domain must be max 32 characters"
                             >
                         </div>
+
                         <div class="mb-3">
                             <label for="firstName" class="form-label">First Name</label>
                             <input
@@ -43,9 +46,10 @@
                                     maxlength="32"
                                     pattern="[a-zA-Z]+"
                                     placeholder="John"
-                                    title="First name must be 3-32 letters"
+                                    title="First name must contain only letters and be 3-32 characters long"
                             >
                         </div>
+
                         <div class="mb-3">
                             <label for="lastName" class="form-label">Last Name</label>
                             <input
@@ -58,7 +62,7 @@
                                     maxlength="32"
                                     pattern="[a-zA-Z]+"
                                     placeholder="Doe"
-                                    title="Last name must be 3-32 letters"
+                                    title="Last name must contain only letters and be 3-32 characters long"
                             >
                         </div>
                         <div class="d-grid">
