@@ -16,7 +16,7 @@
                         </div>
                     <% } %>
 
-                    <form action="/register" method="POST">
+                    <form action="/register-password" method="GET">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input
@@ -25,7 +25,10 @@
                                     id="email"
                                     name="email"
                                     required
+                                    pattern="^[a-zA-Z0-9._]{3,}@[a-zA-Z0-9.-]{1,32}$"
+                                    maxlength="64"
                                     placeholder="name@example.com"
+                                    title="Email must be at least 3 characters before @ and domain must be max 32 characters"
                             >
                         </div>
                         <div class="mb-3">
@@ -36,7 +39,11 @@
                                     id="firstName"
                                     name="firstName"
                                     required
+                                    minlength="3"
+                                    maxlength="32"
+                                    pattern="[a-zA-Z]+"
                                     placeholder="John"
+                                    title="First name must be 3-32 letters"
                             >
                         </div>
                         <div class="mb-3">
@@ -47,22 +54,15 @@
                                     id="lastName"
                                     name="lastName"
                                     required
+                                    minlength="3"
+                                    maxlength="32"
+                                    pattern="[a-zA-Z]+"
                                     placeholder="Doe"
-                            >
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input
-                                    type="password"
-                                    class="form-control"
-                                    id="password"
-                                    name="password"
-                                    required
-                                    placeholder="Enter your password"
+                                    title="Last name must be 3-32 letters"
                             >
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary">Continue to Password</button>
                         </div>
                     </form>
                     <p class="text-center mt-3 mb-0">

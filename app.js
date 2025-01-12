@@ -3,7 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRoutes = require('./routes/login');
+var authenticationRoutes = require('./routes/authentication');
 
 var app = express();
 
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRoutes);
+app.use('/', authenticationRoutes);
 let port = process.env.PORT || 3000;
 app.listen(port);
 module.exports = app;

@@ -14,4 +14,7 @@ router.get('/about', aboutController.getAboutModal)
 
 router.get('/register', registerController.getRegisterPage)
 
+router.get('/register-password', registerController.getPasswordPage)
+
+
 module.exports = router;
