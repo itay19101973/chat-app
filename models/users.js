@@ -8,7 +8,7 @@ module.exports = {
             throw new Error("This email is already in use, please choose another one");
         }
         users.push(user);
-        return user;
+        console.log(users);
     },
 
     // Find user by email

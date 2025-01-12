@@ -9,6 +9,13 @@
             <div class="card shadow-sm">
                 <div class="card-body p-4">
                     <h2 class="text-center mb-4">Login</h2>
+
+                    <% if (typeof registered !== 'undefined' && registered) { %>
+                        <div class="alert alert-success" role="alert">
+                            Registration successful! Please log in to continue.
+                        </div>
+                    <% } %>
+
                     <form action="/login" method="POST">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
