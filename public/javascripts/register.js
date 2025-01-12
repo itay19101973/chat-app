@@ -1,37 +1,62 @@
 document.addEventListener('DOMContentLoaded', () => {
     const formValidator = (() => {
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('confirmPassword');
+        const email = document.getElementById('email');
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
 
-        function validatePassword() {
+        function validateEmail(email) {
+            const [localPart, domain] = email.split('@');
+            return localPart.length >= 3 &&
+                domain.length <= 32 &&
+                /^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+$/.test(email);
+        }
 
-            if (!password || !confirmPassword) {
-                return false;
+        function validateName(value) {
+            return value.length >= 3 &&
+                value.length <= 32 &&
+                /^[a-zA-Z]+$/.test(value);
+        }
+
+        function validateForm() {
+            let isValid = true;
+
+            if (!validateEmail(email.value)) {
+                errorHandler.showError('email');
+                isValid = false;
             }
 
-            return password.value === confirmPassword.value;
+            if (!validateName(firstName.value)) {
+                errorHandler.showError('firstName');
+                isValid = false;
+            }
 
+            if (!validateName(lastName.value)) {
+                errorHandler.showError('lastName');
+                isValid = false;
+            }
+
+            return isValid;
         }
 
         return {
-            validatePassword
+            validateForm
         };
     })();
 
     const errorHandler = (() => {
-        const errorContainer = document.getElementById('error-message');
-
-        function showError() {
-            errorContainer.classList.remove('d-none'); // Show error message
+        function showError(fieldName) {
+            const errorDiv = document.getElementById(`${fieldName}-error`);
+            errorDiv.classList.remove('d-none');
         }
 
-        function clearError() {
-            errorContainer.classList.add('d-none'); // Hide error message
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('[id$="-error"]');
+            errorElements.forEach(element => element.classList.add('d-none'));
         }
 
         return {
             showError,
-            clearError
+            clearErrors
         };
     })();
 
@@ -40,19 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function handleSubmit(e) {
             e.preventDefault();
+            errorHandler.clearErrors();
 
-            errorHandler.clearError(); // Clear any previous error
-
-            if (!formValidator.validatePassword()) {
-                errorHandler.showError(); // Show error if passwords don't match
-                return; // Stop form submission if passwords don't match
+            if (!formValidator.validateForm()) {
+                return;
             }
 
-            form.submit(); // If validation passes, submit the form
+            form.submit();
         }
 
         function init() {
-            form.addEventListener('submit', handleSubmit); // Add event listener
+            form.addEventListener('submit', handleSubmit);
         }
 
         return {
@@ -60,6 +83,5 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     })();
 
-    // Initialize form handling after DOM content is loaded
     formHandler.init();
 });

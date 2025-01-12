@@ -5,11 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function validatePassword() {
 
-            if (!password || !confirmPassword) {
-                return false;
+            if (!password.value || !confirmPassword.value) {
+                return [false, "Empty Password"];
             }
 
-            return password.value === confirmPassword.value;
+            if (password.value.length >= 32) {
+                return [false, "Password too long"];
+            }
+
+            if(password.value !== confirmPassword.value)
+            {
+                return [false, "Passwords do not match"];
+            }
+
+            return [true, ""];
 
         }
 
@@ -21,11 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorHandler = (() => {
         const errorContainer = document.getElementById('error-message');
 
-        function showError() {
+        function showError(errorMsg) {
+            errorContainer.innerHTML = errorMsg;
             errorContainer.classList.remove('d-none'); // Show error message
         }
 
         function clearError() {
+            errorContainer.innerHTML = '';
             errorContainer.classList.add('d-none'); // Hide error message
         }
 
@@ -43,8 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             errorHandler.clearError(); // Clear any previous error
 
-            if (!formValidator.validatePassword()) {
-                errorHandler.showError(); // Show error if passwords don't match
+            let [validPassword, errMsg] = formValidator.validatePassword();
+
+            if (!validPassword) {
+                errorHandler.showError(errMsg); // Show error if passwords don't match
                 return; // Stop form submission if passwords don't match
             }
 
