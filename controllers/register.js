@@ -10,7 +10,7 @@ exports.handleUserRegistration = (req, res) => {
     }
     catch (error) {
         return res.render('register-password', {
-            errorMessage: 'This email is already in use, please choose another one',
+            errorMessage:  "Something went wrong , can't add to server , please try again.",
             title: 'Password Page',
             email: email,
             firstName: firstName,
