@@ -10,6 +10,8 @@ exports.handleUserRegistration = (req, res) => {
 
         let user = {email, firstName, lastName, password};
         Users.addUser(user);
+        const cookies = new Cookies(req, res, { keys: keys });
+        cookies.set('userInfo', null, { maxAge: 0, path: '/' });
     }
     catch (error) {
         return res.render('register-password', {
