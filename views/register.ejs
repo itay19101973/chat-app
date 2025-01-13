@@ -20,6 +20,8 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input
+
+                                    value="<%= typeof email !== 'undefined' ? email : '' %>"
                                     type="email"
                                     class="form-control"
                                     id="email"
@@ -34,6 +36,7 @@
                         <div class="mb-3">
                             <label for="firstName" class="form-label">First Name</label>
                             <input
+                                    value="<%= typeof firstName !== 'undefined' ? firstName : '' %>"
                                     type="text"
                                     class="form-control"
                                     id="firstName"
@@ -48,6 +51,7 @@
                         <div class="mb-3">
                             <label for="lastName" class="form-label">Last Name</label>
                             <input
+                                    value="<%= typeof lastName !== 'undefined' ? lastName : '' %>"
                                     type="text"
                                     class="form-control"
                                     id="lastName"
