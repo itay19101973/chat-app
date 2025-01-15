@@ -1,19 +1,33 @@
 const Users = require('../models/users');
 const Cookies = require('cookies');
 const keys = ['keyboard cat'];
+const REGISTER =30000
 
 
 exports.handleUserRegistration = (req, res) => {
+    const endSessionE = "Your session has ended, please try again."
     const {email, firstName, lastName, password} = req.body;
+    const cookies = new Cookies(req, res, { keys: keys });
 
     try {
-
         let user = {email, firstName, lastName, password};
-        Users.addUser(user);
-        const cookies = new Cookies(req, res, { keys: keys });
-        cookies.set('userInfo', null, { maxAge: 0, path: '/' });
+        const userInfo = cookies.get('userInfo');
+        if(userInfo) {
+            Users.addUser(user);
+            cookies.set('userInfo', null, { maxAge: 0, path: '/' });
+        }
+        else{
+            throw new Error(endSessionE);
+        }
+
     }
     catch (error) {
+        if(error.message === endSessionE ) {
+            return res.render('register', {
+                errorMessage:  endSessionE,
+                title: 'register'
+            });
+        }
         return res.render('register-password', {
             errorMessage:  "Something went wrong , can't add to server , please try again.",
             title: 'Password Page',
@@ -58,7 +72,7 @@ exports.getPasswordPage = (req, res) => {
         }),
         {
             path: '/',      // Cookie is available site-wide
-            maxAge: 30000   // Cookie lasts for 30 seconds (in milliseconds)
+            maxAge: REGISTER   // Cookie lasts for 30 seconds (in milliseconds)
         }
     );
 
