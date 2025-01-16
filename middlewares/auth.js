@@ -1,5 +1,8 @@
 // middleware/auth.js
 const users = require('../models/users');
+const Cookies = require('cookies');
+const keys = ['keyboard cat'];
+
 
 const checkEmailAvailability = (req, res, next) => {
     const email = req.query.email?.toLowerCase();
@@ -13,4 +16,4 @@ const checkEmailAvailability = (req, res, next) => {
     next();
 };
 
-module.exports = { checkEmailAvailability };
+module.exports = { checkEmailAvailability};
