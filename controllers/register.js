@@ -71,7 +71,7 @@ exports.getPasswordPage = (req, res, next) => {
     const { email, firstName, lastName } = req.query;
 
     if(!email || !firstName || !lastName) {
-        res.redirect("/login");
+        res.redirect("/register");
     }
     // create cookie
 
