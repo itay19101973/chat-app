@@ -36,8 +36,15 @@ exports.handleUserRegistration = (req, res) => {
             lastName: lastName
         });
     }
-
-    res.render('login', {title: "Login", registered : "You are now registered!"})
+    cookies.set('registeredMessage',
+        JSON.stringify({
+            message: "You are now registered!"
+        }),
+        {
+            maxAge : 1000,
+            path: '/'
+        });
+    res.redirect('/login');
 };
 
 exports.getRegisterPage = (req, res) => {
