@@ -4,7 +4,7 @@ const Message = require("../models/Message");
 exports.getAllMessages = async function (req, res) {
     try {
         const messages = await Message.findAll({
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'ASC']]
         });
         res.json(messages);
     } catch (error) {
