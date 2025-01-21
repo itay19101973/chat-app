@@ -1,70 +1,73 @@
-const Messages = require("./messages");
-let nextId = 0;
-const Message = require("../models/Message.js");
+// controllers/messages.js
+const Message = require("../models/Message");
 
-exports.getAllMessages = function (req, res) {
-   res.json(Messages.getAllMessages());
+exports.getAllMessages = async function (req, res) {
+    try {
+        const messages = await Message.findAll({
+            order: [['createdAt', 'DESC']]
+        });
+        res.json(messages);
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error fetching messages' });
+    }
 }
 
-exports.addMessage = function (req, res) {
-    let content = req.body.message.trim();
-    const newMessage = new Message(nextId++, content,  req.session.userName , req.session.email);
-    res.json(Messages.addMessage(newMessage));
+exports.addMessage = async function (req, res) {
+    try {
+        const content = req.body.message.trim();
+        const newMessage = await Message.create({
+            content: content,
+            userName: req.session.userName,
+            email: req.session.email
+        });
+        res.json(newMessage);
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error creating message' });
+    }
 }
 
-exports.updateMessage = function(req, res) {
-    const messageId = parseInt(req.params.id);  // Extract message ID from params
+exports.updateMessage = async function(req, res) {
+    try {
+        const messageId = parseInt(req.params.id);
+        const newContent = req.body.message.trim();
 
-    let oldMessage = Messages.getMessageById(messageId);
-    if(!oldMessage){
-        res.status(404).json({ success: false, message: 'page not found.' });
+        const message = await Message.findByPk(messageId);
+
+        if (!message) {
+            return res.status(404).json({ success: false, message: 'Message not found' });
+        }
+
+        if (message.email !== req.session.email) {
+            return res.status(403).json({ success: false, message: 'Unauthorized to update this message' });
+        }
+
+        message.content = newContent;
+        await message.save();
+
+        res.json(message);
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error updating message' });
     }
-    if(oldMessage.email !== req.session.email){
-        res.status(404).json({ success: false, message: 'Message not found.'});
-    }
-
-
-    const newContent = req.body.message.trim(); // New message content
-
-    res.json( Messages.updateMessage(messageId, newContent));
 }
 
-exports.deleteMessage = function (req, res) {
-    const messageId = parseInt(req.params.id);  // Extract message ID from params
+exports.deleteMessage = async function(req, res) {
+    try {
+        const messageId = parseInt(req.params.id);
 
-    let oldMessage = Messages.getMessageById(messageId);
-    if(!oldMessage){
-        res.status(404).json({ success: false, message: 'page not found.' });
-    }
-    if(oldMessage.email !== req.session.email){
-        res.status(404).json({ success: false, message: 'Message not found.'});
-    }
+        const message = await Message.findByPk(messageId);
 
-    res.json( Messages.deleteMessage(messageId, newContent));
+        if (!message) {
+            return res.status(404).json({ success: false, message: 'Message not found' });
+        }
+
+        if (message.email !== req.session.email) {
+            return res.status(403).json({ success: false, message: 'Unauthorized to delete this message' });
+        }
+
+        await message.destroy();
+
+        res.json({ success: true, message: 'Message deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error deleting message' });
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

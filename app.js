@@ -6,6 +6,7 @@ const session = require('express-session');
 var authenticationRoutes = require('./routes/authRoutes');
 var chatRoutes = require('./routes/chatRoutes');
 var messagesAPI = require('./routes/messagesAPI');
+const sequelize = require('./models/index');
 var app = express();
 
 // view engine setup
@@ -25,6 +26,11 @@ app.use(session({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Sync database
+sequelize.sync()
+    .then(() => console.log('Database synced'))
+    .catch((err) => console.error('Error syncing database:', err));
 
 
 app.use('/', authenticationRoutes);
