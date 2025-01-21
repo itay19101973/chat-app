@@ -15,6 +15,11 @@
                             Registration successful! Please log in to continue.
                         </div>
                     <% } %>
+                    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= errorMessage %>.
+                        </div>
+                    <% } %>
 
                     <form action="/login" method="POST">
                         <div class="mb-3">

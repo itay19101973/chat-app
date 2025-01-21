@@ -48,10 +48,10 @@ exports.handleUserRegistration = (req, res) => {
 };
 
 exports.getRegisterPage = (req, res) => {
+
     const cookies = new Cookies(req, res, { keys: keys });
     let userInfo = cookies.get('userInfo');
 
-    console.log('User Info from cookies:', userInfo);
     if (!userInfo) {
         res.render('register', { title: 'Register Page' });
     }

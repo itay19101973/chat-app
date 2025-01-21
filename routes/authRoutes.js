@@ -11,6 +11,8 @@ router.get('/', loginController.getLoginPage);
 
 router.get('/login', loginController.getLoginPage);
 
+router.post('/login' ,loginController.handleUserLogin )
+
 router.get('/about', aboutController.getAboutModal);
 
 router.get('/register', registerController.getRegisterPage);
