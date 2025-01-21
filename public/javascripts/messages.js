@@ -85,7 +85,7 @@
         }
 
         function renderMessage(message, currentUser) {
-            const isOwnMessage = message.userId === currentUser.id;
+            const isOwnMessage = message.email === currentUser.email;
 
             return `
                 <div class="message mb-3 ${isOwnMessage ? 'text-end' : ''}" data-message-id="${message.id}">
