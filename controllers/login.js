@@ -22,8 +22,11 @@ exports.getLoginPage = (req, res) => {
 };
 
 exports.handleUserLogin = (req, res) => {
-    const { userName,password } = req.query;
-    if (Users.checkUserExists(userName,password)){
+    let { email,password } = req.body;
+    email = email.trim().toLowerCase();
+    password = password.trim();
+    let userName = Users.checkUserExists(email,password);
+    if (userName){
         req.session.loggedIn = true;
         req.session.user = userName;
         res.redirect('/chat');

@@ -6,7 +6,11 @@ const REGISTER =30000
 
 exports.handleUserRegistration = (req, res) => {
     const endSessionE = "Your session has ended, please try again."
-    const {email, firstName, lastName, password} = req.body;
+    let {email, firstName, lastName, password} = req.body;
+    email = email.trim().toLowerCase();
+    lastName = lastName.trim();
+    firstName = firstName.trim();
+    password = password.trim();
     const cookies = new Cookies(req, res, { keys: keys });
 
     try {

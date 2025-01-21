@@ -35,5 +35,14 @@ module.exports = {
     // Get all users (for testing purposes)
     getAllUsers() {
         return users;
+    },
+
+    checkUserExists(email , password){
+        for (let user of users) {
+            if (user.email === email && user.password === password) {
+                return user.firstName;
+            }
+        }
+        return false;
     }
 };
