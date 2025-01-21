@@ -22,7 +22,7 @@ exports.addMessage = async function (req, res) {
         });
         res.json(newMessage);
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error creating message' });
+        res.status(500).json({ success: false, message: 'Error sending message' });
     }
 }
 
@@ -70,4 +70,11 @@ exports.deleteMessage = async function(req, res) {
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error deleting message' });
     }
+}
+
+exports.getSession = (req, res) => {
+    res.json({
+        userName: req.session.userName,
+        email: req.session.email
+    });
 }

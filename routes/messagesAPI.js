@@ -12,7 +12,8 @@ router.patch('/messages/:id', messagesController.updateMessage);
 // Delete a message by ID
 router.delete('/messages/:id', messagesController.deleteMessage);
 
-
+// In messagesAPI.js (routes)
+router.get('/session', messagesController.getSession);
 
 
 
