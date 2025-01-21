@@ -28,15 +28,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Sync database
-sequelize.sync()
-    .then(() => console.log('Database synced'))
-    .catch((err) => console.error('Error syncing database:', err));
+const { syncDatabase } = require('./models');
+
+// In your app startup
+syncDatabase().then(() => {
+    console.log('Database ready');
+});
 
 
 app.use('/', authenticationRoutes);
 app.use('/chat', chatRoutes);
 app.use('/messages-api', messagesAPI); //  json data
 
-let port = process.env.PORT || 2999;
+let port = process.env.PORT || 3000;
 app.listen(port);
 module.exports = app;

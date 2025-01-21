@@ -1,6 +1,5 @@
-// models/Message.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('./index');
+const sequelize = require('./database');
 
 const Message = sequelize.define('Message', {
     id: {
@@ -27,7 +26,7 @@ const Message = sequelize.define('Message', {
         }
     }
 }, {
-    timestamps: true // This will add createdAt and updatedAt fields
+    timestamps: true
 });
 
 module.exports = Message;

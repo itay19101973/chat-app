@@ -1,6 +1,5 @@
-// models/User.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('./index');
+const sequelize = require('./database');
 
 const User = sequelize.define('User', {
     id: {
@@ -41,9 +40,5 @@ const User = sequelize.define('User', {
         }
     }
 });
-
-// // Define association with Message model
-// User.hasMany(sequelize.models.Message);
-// sequelize.models.Message.belongsTo(User);
 
 module.exports = User;

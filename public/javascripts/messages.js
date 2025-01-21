@@ -36,7 +36,7 @@
         function createModals() {
             // Create edit modal HTML
             const editModalHTML = `
-                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -57,7 +57,7 @@
 
             // Create delete modal HTML
             const deleteModalHTML = `
-                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -89,18 +89,17 @@
 
             return `
                 <div class="message mb-3 ${isOwnMessage ? 'text-end' : ''}" data-message-id="${message.id}">
-                    <small class="text-muted">${message.User.firstName} - ${new Date(message.createdAt).toLocaleString()}</small>
+                    <small class="text-muted">${message.userName} - ${new Date(message.createdAt).toLocaleString()}</small>
                     <div class="message-content p-2 rounded ${isOwnMessage ? 'bg-primary text-white' : 'bg-light'}">
                         ${message.content}
-                        ${isOwnMessage ? `
-                            <div class="message-actions mt-1">
-                                <button class="btn btn-sm btn-light edit-message" data-message-id="${message.id}">Edit</button>
-                                <button class="btn btn-sm btn-danger delete-message" data-message-id="${message.id}">Delete</button>
-                            </div>
-                        ` : ''}
                     </div>
-                </div>
-            `;
+                    ${isOwnMessage ? `
+                        <div class="message-actions mt-1 text-end">
+                            <button class="btn btn-sm btn-light edit-message" data-message-id="${message.id}">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-message" data-message-id="${message.id}">Delete</button>
+                        </div>
+                    ` : ''}
+                    </div>`;
         }
 
         function updateMessagesUI(messages) {
