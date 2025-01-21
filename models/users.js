@@ -1,4 +1,5 @@
 // models/users.js
+// todo make it db
 const users = [];
 
 module.exports = {

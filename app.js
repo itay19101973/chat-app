@@ -5,6 +5,7 @@ var logger = require('morgan');
 const session = require('express-session');
 var authenticationRoutes = require('./routes/authRoutes');
 var chatRoutes = require('./routes/chatRoutes');
+var messagesAPI = require('./routes/messagesAPI');
 var app = express();
 
 // view engine setup
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', authenticationRoutes);
 app.use('/chat', chatRoutes);
+app.use('/messages-api', messagesAPI); //  json data
 
 let port = process.env.PORT || 3000;
 app.listen(port);

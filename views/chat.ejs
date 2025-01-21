@@ -8,7 +8,7 @@
         <div class="col-md-8 mx-auto">
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h2 class="mb-0">Welcome <%= username %></h2>
+                    <h2 class="mb-0">Welcome <%= userName %></h2>
                     <a href="/logout" class="btn btn-outline-secondary btn-sm">Logout</a>
                 </div>
                 <div class="card-body">
@@ -16,9 +16,9 @@
                     <div class="messages-container mb-4" style="height: 400px; overflow-y: auto;">
                         <% if (typeof messages !== 'undefined' && messages.length > 0) { %>
                             <% messages.forEach(message => { %>
-                                <div class="message mb-3 <%= message.sender === username ? 'text-end' : '' %>">
+                                <div class="message mb-3 <%= message.sender === userName ? 'text-end' : '' %>">
                                     <small class="text-muted"><%= message.sender %> - <%= message.timestamp %></small>
-                                    <div class="message-content p-2 rounded <%= message.sender === username ? 'bg-primary text-white' : 'bg-light' %>">
+                                    <div class="message-content p-2 rounded <%= message.sender === userName ? 'bg-primary text-white' : 'bg-light' %>">
                                         <%= message.text %>
                                     </div>
                                 </div>
@@ -32,7 +32,7 @@
                             <input
                                     type="text"
                                     class="form-control"
-                                    name="messageText"
+                                    name="message"
                                     placeholder="Type your message..."
                                     required
                             >
