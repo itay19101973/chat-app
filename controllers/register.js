@@ -1,12 +1,12 @@
-const Users = require('../models/users');
+const User = require('../models/User');
 const Cookies = require('cookies');
 const keys = ['keyboard cat'];
-const REGISTER =30000
+const REGISTER = 30000;
+const { validateEmail, validateName } = require('./users');
 
-
-exports.handleUserRegistration = (req, res) => {
-    const endSessionE = "Your session has ended, please try again."
-    let {email, firstName, lastName, password} = req.body;
+exports.handleUserRegistration = async (req, res) => {
+    const endSessionE = "Your session has ended, please try again.";
+    let { email, firstName, lastName, password } = req.body;
     email = email.trim().toLowerCase();
     lastName = lastName.trim();
     firstName = firstName.trim();
@@ -14,53 +14,58 @@ exports.handleUserRegistration = (req, res) => {
     const cookies = new Cookies(req, res, { keys: keys });
 
     try {
-        let user = {email, firstName, lastName, password};
         const userInfo = cookies.get('userInfo');
-        if(userInfo) {
-            Users.addUser(user);
-            cookies.set('userInfo', null, { maxAge: 0, path: '/' });
-        }
-        else{
+        if (!userInfo) {
             throw new Error(endSessionE);
         }
 
-    }
-    catch (error) {
-        if(error.message === endSessionE ) {
+        if (!validateEmail(email) || !validateName(firstName) || !validateName(lastName) ||
+            password.length > 32 ) {
+            throw new Error("Invalid input data");
+        }
+
+        await User.create({
+            email,
+            firstName,
+            lastName,
+            password // Note: In a real app, hash the password
+        });
+
+        cookies.set('userInfo', null, { maxAge: 0, path: '/' });
+        cookies.set('registeredMessage',
+            JSON.stringify({
+                message: "You are now registered!"
+            }),
+            {
+                maxAge: 1000,
+                path: '/'
+            });
+        res.redirect('/login');
+
+    } catch (error) {
+        if (error.message === endSessionE) {
             return res.render('register', {
-                errorMessage:  endSessionE,
+                errorMessage: endSessionE,
                 title: 'register'
             });
         }
         return res.render('register-password', {
-            errorMessage:  "Something went wrong , can't add to server , please try again.",
+            errorMessage: "Something went wrong, can't add to server, please try again.",
             title: 'Password Page',
-            email: email,
-            firstName: firstName,
-            lastName: lastName
+            email,
+            firstName,
+            lastName
         });
     }
-    cookies.set('registeredMessage',
-        JSON.stringify({
-            message: "You are now registered!"
-        }),
-        {
-            maxAge : 1000,
-            path: '/'
-        });
-    res.redirect('/login');
 };
 
 exports.getRegisterPage = (req, res) => {
-
     const cookies = new Cookies(req, res, { keys: keys });
     let userInfo = cookies.get('userInfo');
 
     if (!userInfo) {
         res.render('register', { title: 'Register Page' });
-    }
-    else {
-        // Parse the JSON string from the cookie
+    } else {
         userInfo = JSON.parse(userInfo);
         res.render('register', {
             title: 'Register Page',
@@ -72,33 +77,26 @@ exports.getRegisterPage = (req, res) => {
 };
 
 exports.getPasswordPage = (req, res, next) => {
-
     const { email, firstName, lastName } = req.query;
 
-    if(!email || !firstName || !lastName) {
-        res.redirect("/register");
+    if (!email || !firstName || !lastName) {
+        return res.redirect("/register");
     }
-    // create cookie
 
     const cookies = new Cookies(req, res, { keys: keys });
     cookies.set('userInfo', JSON.stringify({
-            email: email,
-            firstName: firstName,
-            lastName: lastName
-        }),
-        {
-            path: '/',      // Cookie is available site-wide
-            maxAge: REGISTER   // Cookie lasts for 30 seconds (in milliseconds)
-        }
-    );
-
-
-
-    res.render('register-password', { title: 'Password Page',
-        email: email,
-        firstName: firstName,
-        lastName: lastName
+        email,
+        firstName,
+        lastName
+    }), {
+        path: '/',
+        maxAge: REGISTER
     });
 
-    next();
+    res.render('register-password', {
+        title: 'Password Page',
+        email,
+        firstName,
+        lastName
+    });
 };

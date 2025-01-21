@@ -1,19 +1,23 @@
-// middleware/auth.js
-const users = require('../models/users');
-const Cookies = require('cookies');
-const keys = ['keyboard cat'];
+const User = require('../models/User');
 
+exports.checkEmailAvailability = async (req, res, next) => {
+    try {
+        const { email } = req.query;
+        const existingUser = await User.findOne({
+            where: { email: email.toLowerCase() }
+        });
 
-const checkEmailAvailability = (req, res, next) => {
-    const email = req.query.email?.toLowerCase();
-
-    if (users.findByEmail(email)) {
-        return res.render('register', {
-            errorMessage: 'This email is already in use, please choose another one',
-            title: 'Register'
+        if (existingUser) {
+            return res.render('register', {
+                title: 'Register Page',
+                errorMessage: 'Email already exists'
+            });
+        }
+        next();
+    } catch (error) {
+        res.render('register', {
+            title: 'Register Page',
+            errorMessage: 'Error checking email availability'
         });
     }
-    next();
 };
-
-module.exports = { checkEmailAvailability};

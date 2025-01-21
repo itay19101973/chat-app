@@ -37,6 +37,6 @@ app.use('/', authenticationRoutes);
 app.use('/chat', chatRoutes);
 app.use('/messages-api', messagesAPI); //  json data
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 2999;
 app.listen(port);
 module.exports = app;

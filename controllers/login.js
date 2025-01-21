@@ -1,6 +1,6 @@
 const Cookies = require('cookies');
 const keys = ['keyboard cat'];
-const Users = require('../models/users');
+const User = require('../models/User');
 
 exports.getLoginPage = (req, res) => {
     const cookies = new Cookies(req, res, { keys: keys });
@@ -21,29 +21,42 @@ exports.getLoginPage = (req, res) => {
 
 };
 
-exports.handleUserLogin = (req, res) => {
-    let { email,password } = req.body;
-    email = email.trim().toLowerCase();
-    password = password.trim();
-    let userName = Users.checkUserExists(email,password);
-    if (userName){
-        req.session.email = email;
-        req.session.loggedIn = true;
-        req.session.userName = userName;
-        res.redirect('/chat');
-    }
-    else{
-        res.render('login', { title: 'Login Page', errorMessage: 'Username or Password are not correct. Please try again.' });
-    }
-}
+exports.handleUserLogin = async (req, res) => {
+    try {
+        let { email, password } = req.body;
+        email = email.trim().toLowerCase();
+        password = password.trim();
 
-exports.logout = (req,res)=>{
+        const user = await User.findOne({
+            where: {
+                email: email,
+                password: password // Note: In a real app, use proper password hashing
+            }
+        });
+
+        if (user) {
+            req.session.email = email;
+            req.session.loggedIn = true;
+            req.session.userName = user.firstName;
+            res.redirect('/chat');
+        } else {
+            res.render('login', {
+                title: 'Login Page',
+                errorMessage: 'Username or Password are not correct. Please try again.'
+            });
+        }
+    } catch (error) {
+        res.render('login', {
+            title: 'Login Page',
+            errorMessage: 'An error occurred during login. Please try again.'
+        });
+    }
+};
+
+exports.logout = (req, res) => {
     req.session.loggedIn = false;
     res.redirect('/');
-}
-
-
-
+};
 
 
 
