@@ -35,3 +35,25 @@ exports.handleUserLogin = (req, res) => {
         res.render('login', { title: 'Login Page', errorMessage: 'Username or Password are not correct. Please try again.' });
     }
 }
+
+exports.logout = (req,res)=>{
+    req.session.loggedIn = false;
+    res.redirect('/');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

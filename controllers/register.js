@@ -72,6 +72,7 @@ exports.getRegisterPage = (req, res) => {
 };
 
 exports.getPasswordPage = (req, res, next) => {
+
     const { email, firstName, lastName } = req.query;
 
     if(!email || !firstName || !lastName) {

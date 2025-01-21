@@ -9,6 +9,8 @@ const {checkEmailAvailability} = require("../middlewares/auth");
 
 router.get('/', loginController.getLoginPage);
 
+router.get('/logout', loginController.logout)
+
 router.get('/login', loginController.getLoginPage);
 
 router.post('/login' ,loginController.handleUserLogin )
