@@ -23,4 +23,5 @@ router.get('/register-password', checkEmailAvailability, registerController.getP
 
 router.post('/register', registerController.handleUserRegistration)
 
+
 module.exports = router;

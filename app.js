@@ -8,6 +8,7 @@ var chatRoutes = require('./routes/chatRoutes');
 var messagesAPI = require('./routes/messagesAPI');
 var app = express();
 const { syncDatabase } = require('./models');
+const createError = require('http-errors');
 
 
 // view engine setup
@@ -39,6 +40,26 @@ syncDatabase().then(() => {
 app.use('/', authenticationRoutes);
 app.use('/chat', chatRoutes);
 app.use('/messages-api', messagesAPI); //  json data
+
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    next(createError(404));
+});
+
+app.use(function(err, req, res, next) {
+    console.error(err.stack);  // Log the error stack for debugging (optional in production)
+
+    res.status(err.status || 500);
+    if (err.status === 404) {
+        res.render('404', { message: 'Page Not Found' });
+    } else if (err.status === 400) {
+        res.render('error', { message: 'Bad Request', error: err });
+    } else {
+        res.render('error', { message: 'Something went wrong!', error: err });
+    }
+});
+
 
 let port = process.env.PORT || 3000;
 app.listen(port);
