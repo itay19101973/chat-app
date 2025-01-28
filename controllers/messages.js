@@ -2,7 +2,7 @@
 const Message = require("../models/Message");
 const User = require("../models/User");
 const {where} = require("sequelize");
-
+// TODO : DELETED MESSAGE NOT DELETED - ADD PARANOID MODE AND ADD FUNCTIONALITY THAT CHECKS THAT
 exports.getAllMessages = async function (req, res) {
     try {
         let latestMessage = await Message.findAll({
