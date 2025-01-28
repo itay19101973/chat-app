@@ -29,3 +29,12 @@ exports.checkSession = (req, res, next) => {
         next();
     }
 };
+
+exports.checkLoggedIn = (req, res, next) => {
+    if(req.session.loggedIn) {
+        return res.redirect('/chat');
+    }
+    else{
+        next();
+    }
+}

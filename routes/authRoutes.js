@@ -5,9 +5,9 @@ const router = express.Router();
 const loginController = require('../controllers/login');
 const registerController = require('../controllers/register');
 const aboutController = require('../controllers/about');
-const {checkEmailAvailability} = require("../middlewares/auth");
+const {checkEmailAvailability, checkLoggedIn} = require("../middlewares/auth");
 
-router.get('/', loginController.getLoginPage);
+router.get('/', checkLoggedIn, loginController.getLoginPage);
 
 router.get('/logout', loginController.logout)
 
