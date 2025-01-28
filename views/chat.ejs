@@ -1,55 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('includes/head') %>
-<body class="bg-light">
+<body class="bg-gradient">
 <%- include('includes/navigation') %>
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h2 class="mb-0">Welcome <%= userName %></h2>
-                    <a href="/logout" class="btn btn-outline-secondary btn-sm">Logout</a>
+<div class="container-fluid py-5 bg-light min-vh-100">
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card border-0 rounded-4 shadow-lg">
+                <div class="card-header bg-primary bg-gradient text-white p-4 rounded-top-4 d-flex justify-content-between align-items-center">
+                    <h2 class="display-6 mb-0 fw-bold">Welcome <%= userName %></h2>
+                    <a href="/logout" class="btn btn-light btn-lg rounded-pill px-4">Logout</a>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <!-- Search Form -->
                     <div class="search-section mb-4">
                         <form id="searchForm" class="mb-3">
-                            <div class="input-group">
+                            <div class="input-group input-group-lg">
                                 <input
                                         type="text"
-                                        class="form-control"
+                                        class="form-control rounded-start-pill border-2"
                                         id="searchInput"
                                         placeholder="Search messages..."
                                 >
-                                <button type="submit" class="btn btn-secondary">Search</button>
-                                <button type="button" id="clearSearch" class="btn btn-outline-secondary">Clear</button>
+                                <button type="submit" class="btn btn-primary px-4">Search</button>
+                                <button type="button" id="clearSearch" class="btn btn-outline-primary rounded-end-pill">Clear</button>
                             </div>
                         </form>
                         <div id="searchResults" class="d-none">
-                            <h6 class="border-bottom pb-2">Search Results</h6>
-                            <div class="search-results-container" style="max-height: 200px; overflow-y: auto;">
+                            <h6 class="border-bottom border-2 pb-3 fw-bold text-primary">Search Results</h6>
+                            <div class="search-results-container bg-light rounded-3 p-3" style="max-height: 200px; overflow-y: auto;">
                             </div>
                         </div>
                     </div>
-
                     <!-- Messages Container -->
-                    <div class="messages-container mb-4" style="height: 400px; overflow-y: auto;">
-
-
+                    <div class="messages-container mb-4 bg-light rounded-3 p-3 border" style="height: 400px; overflow-y: auto;">
                     </div>
-
                     <!-- Message Input Form -->
-                    <form id="messageForm" class="mt-3">
-                        <div class="input-group">
+                    <form id="messageForm" class="mt-4">
+                        <div class="input-group input-group-lg">
                             <input
                                     type="text"
-                                    class="form-control"
+                                    class="form-control rounded-start-pill border-2"
                                     name="message"
                                     placeholder="Type your message..."
                                     required
                             >
-                            <button type="submit" class="btn btn-primary">Send</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-end-pill px-5 fw-bold">Send</button>
                         </div>
                     </form>
                 </div>
@@ -57,12 +53,8 @@
         </div>
     </div>
 </div>
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- Auto-scroll to bottom of messages -->
 <script src="/javascripts/messages.js"></script>
-
 </body>
 </html>

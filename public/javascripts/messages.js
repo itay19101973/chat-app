@@ -40,12 +40,26 @@
 
         function renderSearchResult(message, currentUser) {
             return `
-            <div class="search-result p-2 border-bottom">
-                <small class="text-muted">${message.User.firstName} - ${new Date(message.createdAt).toLocaleString()}</small>
-                <div class="message-content">
-                    ${message.content}
-                </div>
-            </div>
+            <div class="search-result p-3 border-bottom hover-shadow transition-all" 
+     style="transition: all 0.2s ease-in-out;">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+        <div class="user-info">
+            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2">
+                <i class="bi bi-person-circle me-1"></i>
+                ${message.User.firstName}
+            </span>
+            <small class="text-muted ms-2">
+                <i class="bi bi-clock me-1"></i>
+                ${new Date(message.createdAt).toLocaleString()}
+            </small>
+        </div>
+    </div>
+    <div class="message-content ps-2 ms-1 border-start border-primary">
+        <p class="mb-0 text-break fw-light">
+            ${message.content}
+        </p>
+    </div>
+</div>
         `;
         }
 
@@ -121,18 +135,32 @@
             const isOwnMessage = message.User.id === currentUser.userId;
 
             return `
-                <div class="message mb-3 ${isOwnMessage ? 'text-end' : ''}" data-message-id="${message.id}">
-                    <small class="text-muted">${message.User.firstName} - ${new Date(message.createdAt).toLocaleString()}</small>
-                    <div class="message-content p-2 rounded ${isOwnMessage ? 'bg-primary text-white' : 'bg-light'}">
-                        ${message.content}
-                    </div>
-                    ${isOwnMessage ? `
-                        <div class="message-actions mt-1 text-end">
-                            <button class="btn btn-sm btn-light edit-message" data-message-id="${message.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-message" data-message-id="${message.id}">Delete</button>
-                        </div>
-                    ` : ''}
-                    </div>`;
+                <div class="message mb-4 ${isOwnMessage ? 'text-end' : ''}" data-message-id="${message.id}">
+    <div class="d-flex ${isOwnMessage ? 'justify-content-end' : 'justify-content-start'} align-items-end mb-1">
+        <div class="message-wrapper ${isOwnMessage ? 'ms-auto' : 'me-auto'}" style="max-width: 80%;">
+            <small class="text-muted d-block mb-1 ${isOwnMessage ? 'text-end' : 'text-start'}">
+                <span class="fw-semibold">${message.User.firstName}</span>
+                <span class="ms-2 opacity-75">${new Date(message.createdAt).toLocaleString()}</span>
+            </small>
+            <div class="message-content p-3 rounded-4 shadow-sm ${isOwnMessage ? 'bg-primary bg-gradient text-white' : 'bg-light border'}"
+                 style="word-wrap: break-word;">
+                ${message.content}
+            </div>
+            ${isOwnMessage ? `
+                <div class="message-actions mt-2 d-flex gap-2 justify-content-end">
+                    <button class="btn btn-sm btn-light rounded-pill px-3 edit-message shadow-sm" 
+                            data-message-id="${message.id}">
+                        <i class="bi bi-pencil"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger rounded-pill px-3 delete-message shadow-sm" 
+                            data-message-id="${message.id}">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                </div>
+            ` : ''}
+        </div>
+    </div>
+</div>`;
         }
 
         function updateMessagesUI(messages) {

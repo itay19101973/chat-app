@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('includes/head') %>
-<body class="bg-light">
+<body class="bg-gradient bg-primary bg-opacity-10">
 <%- include('includes/navigation') %>
-<div class="container mt-5">
+<div class="container mt-5 py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h2 class="text-center mb-4">About Us</h2>
-                    <div class="row">
-                        <div class="col-md-10 mb-4">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h4 class="card-title">About the App</h4>
-                                    <p class="card-text">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-5 fw-bold text-primary">About Us</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-md-10">
+                            <div class="card bg-light border-0 rounded-4 mb-5">
+                                <div class="card-body p-4">
+                                    <h4 class="card-title fw-bold text-primary mb-4">
+                                        <i class="bi bi-chat-dots-fill me-2"></i>About the App
+                                    </h4>
+                                    <p class="card-text lead">
                                         Welcome to Cheatos, the ultimate platform for connecting with friends, family, and colleagues.
                                         Our mission is to bring people closer together through seamless communication.
                                         Whether you're sending quick messages, sharing media, or having real-time conversations, we ensure a
@@ -23,40 +25,52 @@
                                     </p>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <h3 class="mb-3">Contact Information</h3>
-                        <div class="list-group mb-4">
-                            <div class="list-group-item">
-                                <i class="bi bi-person me-2"></i>
-
-                                Name: Itay Mijan
+                    <div class="mt-5">
+                        <h3 class="fw-bold text-primary mb-4">
+                            <i class="bi bi-people-fill me-2"></i>Meet Our Team
+                        </h3>
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            <!-- First Team Member -->
+                            <div class="col">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 bg-light hover-shadow transition-all">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title fw-bold mb-3">
+                                            <i class="bi bi-person-circle me-2"></i>Itay Mijan
+                                        </h5>
+                                        <p class="card-text mb-2">
+                                            <i class="bi bi-envelope-fill me-2 text-primary"></i>
+                                            <a href="mailto:itaymij@edu.hac.ac.il" class="text-decoration-none">
+                                                itaymij@edu.hac.ac.il
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="list-group-item">
-                                <i class="bi bi-envelope me-2"></i>
-                                Email: itaymij@edu.hac.ac.il
-                            </div>
-                        </div>
-
-                        <div class="list-group">
-                            <div class="list-group-item">
-                                <i class="bi bi-person me-2"></i>
-
-                                Name: Nir Busheri
-                            </div>
-                            <div class="list-group-item">
-                                <i class="bi bi-envelope me-2"></i>
-                                Email: nirbu@edu.hac.ac.il
+                            <!-- Second Team Member -->
+                            <div class="col">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 bg-light hover-shadow transition-all">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title fw-bold mb-3">
+                                            <i class="bi bi-person-circle me-2"></i>Nir Busheri
+                                        </h5>
+                                        <p class="card-text mb-2">
+                                            <i class="bi bi-envelope-fill me-2 text-primary"></i>
+                                            <a href="mailto:nirbu@edu.hac.ac.il" class="text-decoration-none">
+                                                nirbu@edu.hac.ac.il
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="text-center mt-4">
-                        <a href="/" class="btn btn-primary">
-                            Back to Home
+                    <div class="text-center mt-5">
+                        <a href="/" class="btn btn-primary btn-lg rounded-pill px-5">
+                            <i class="bi bi-house-fill me-2"></i>Back to Home
                         </a>
                     </div>
                 </div>
