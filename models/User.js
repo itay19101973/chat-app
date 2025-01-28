@@ -35,10 +35,10 @@ const User = sequelize.define('User', {
         }
     },
     password: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(60), // Specify length for bcrypt hash
         allowNull: false,
         validate: {
-            len: [1, 32]
+            len: [60, 60] // Bcrypt always generates 60-character hashes
         }
     }
 });

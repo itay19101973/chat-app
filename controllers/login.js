@@ -1,6 +1,7 @@
 const Cookies = require('cookies');
 const keys = ['keyboard cat'];
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 exports.getLoginPage = (req, res) => {
     const cookies = new Cookies(req, res, { keys: keys });
@@ -30,11 +31,12 @@ exports.handleUserLogin = async (req, res) => {
         const user = await User.findOne({
             where: {
                 email: email,
-                password: password // Note: In a real app, use proper password hashing
             }
         });
 
-        if (user) {
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (passwordMatch) {
             req.session.email = email;
             req.session.loggedIn = true;
             req.session.userName = user.firstName;

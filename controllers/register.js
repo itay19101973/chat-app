@@ -3,6 +3,8 @@ const Cookies = require('cookies');
 const keys = ['keyboard cat'];
 const REGISTER = 30000;
 const { validateEmail, validateName } = require('./users');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 exports.handleUserRegistration = async (req, res) => {
     const endSessionE = "Your session has ended, please try again.";
@@ -24,11 +26,13 @@ exports.handleUserRegistration = async (req, res) => {
             throw new Error("Invalid input data");
         }
 
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         await User.create({
             email,
             firstName,
             lastName,
-            password // Note: In a real app, hash the password
+            password: hashedPassword
         });
 
         cookies.set('userInfo', null, { maxAge: 0, path: '/' });
