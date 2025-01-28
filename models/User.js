@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./database');
+const Message = require('./Message');
+
 
 const User = sequelize.define('User', {
     id: {
@@ -40,5 +42,10 @@ const User = sequelize.define('User', {
         }
     }
 });
+
+
+// Define associations
+Message.belongsTo(User);
+User.hasMany(Message);
 
 module.exports = User;

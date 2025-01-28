@@ -2,10 +2,6 @@ const sequelize = require('./database');
 const User = require('./User');
 const Message = require('./Message');
 
-// Define associations
-Message.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Message, { foreignKey: 'userId' });
-
 // Sync all models
 async function syncDatabase() {
     try {

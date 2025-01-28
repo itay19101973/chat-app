@@ -16,10 +16,7 @@ exports.addMessage = async function (req, res) {
     try {
         const content = req.body.message.trim();
         const newMessage = await Message.create({
-            content: content,
-            userName: req.session.userName,
-            email: req.session.email,
-            userId: req.session.userId
+            content: content
         });
         res.json(newMessage);
     } catch (error) {
