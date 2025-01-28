@@ -85,11 +85,11 @@
         }
 
         function renderMessage(message, currentUser) {
-            const isOwnMessage = message.userId === currentUser.userId;
+            const isOwnMessage = message.User.id === currentUser.userId;
 
             return `
                 <div class="message mb-3 ${isOwnMessage ? 'text-end' : ''}" data-message-id="${message.id}">
-                    <small class="text-muted">${message.userName} - ${new Date(message.createdAt).toLocaleString()}</small>
+                    <small class="text-muted">${message.User.firstName} - ${new Date(message.createdAt).toLocaleString()}</small>
                     <div class="message-content p-2 rounded ${isOwnMessage ? 'bg-primary text-white' : 'bg-light'}">
                         ${message.content}
                     </div>

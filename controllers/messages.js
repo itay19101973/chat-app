@@ -1,9 +1,14 @@
 // controllers/messages.js
 const Message = require("../models/Message");
+const User = require("../models/User");
 
 exports.getAllMessages = async function (req, res) {
     try {
         const messages = await Message.findAll({
+            include: [{
+                model: User,
+                attributes: ['id', 'firstName']
+            }],
             order: [['createdAt', 'ASC']]
         });
         res.json(messages);
@@ -16,7 +21,8 @@ exports.addMessage = async function (req, res) {
     try {
         const content = req.body.message.trim();
         const newMessage = await Message.create({
-            content: content
+            content: content,
+            UserId: req.session.userId
         });
         res.json(newMessage);
     } catch (error) {
