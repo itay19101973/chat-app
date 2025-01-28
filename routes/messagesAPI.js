@@ -16,7 +16,7 @@ router.delete('/messages/:id', checkSession ,messagesController.deleteMessage);
 // In messagesAPI.js (routes)
 router.get('/userDetails',checkSession, messagesController.getUserDetails);
 
-
+router.get('/search/:msgText',checkSession, messagesController.findMessages)
 
 
 

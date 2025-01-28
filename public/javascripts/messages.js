@@ -28,10 +28,43 @@
     // DOM Module
     const DOMModule = (function () {
         const elements = {
-            messageForm: document.querySelector('form'),
+            messageForm: document.querySelector('#messageForm'),
             messageInput: document.querySelector('input[name="message"]'),
-            messagesContainer: document.querySelector('.messages-container')
+            messagesContainer: document.querySelector('.messages-container'),
+            searchForm: document.querySelector('#searchForm'),
+            searchInput: document.querySelector('#searchInput'),
+            searchResults: document.querySelector('#searchResults'),
+            searchResultsContainer: document.querySelector('.search-results-container'),
+            clearSearchBtn: document.querySelector('#clearSearch')
         };
+
+        function renderSearchResult(message, currentUser) {
+            return `
+            <div class="search-result p-2 border-bottom">
+                <small class="text-muted">${message.User.firstName} - ${new Date(message.createdAt).toLocaleString()}</small>
+                <div class="message-content">
+                    ${message.content}
+                </div>
+            </div>
+        `;
+        }
+
+        function updateSearchResults(messages) {
+            const currentUser = StateManager.getCurrentUser();
+            if (messages.length === 0) {
+                elements.searchResultsContainer.innerHTML = '<p class="text-muted p-2">No messages found</p>';
+            } else {
+                elements.searchResultsContainer.innerHTML = messages
+                    .map(message => renderSearchResult(message, currentUser))
+                    .join('');
+            }
+            elements.searchResults.classList.remove('d-none');
+        }
+
+        function clearSearch() {
+            elements.searchInput.value = '';
+            elements.searchResults.classList.add('d-none');
+        }
 
         function createModals() {
             // Create edit modal HTML
@@ -150,6 +183,8 @@
 
         return {
             elements,
+            updateSearchResults,
+            clearSearch,
             createModals,
             updateMessagesUI,
             showToast,
@@ -232,12 +267,22 @@
             return response.json();
         }
 
+        async function searchMessages(searchText) {
+            const response = await fetch(`/messages-api/search/${encodeURIComponent(searchText)}`);
+
+            if (await handleRedirect(response)) return;
+
+            if (!response.ok) throw new Error('Failed to search messages');
+            return response.json();
+        }
+
         // Expose public API methods
         return {
             fetchMessages,
             sendMessage,
             updateMessage,
-            deleteMessage
+            deleteMessage,
+            searchMessages
         };
     })();
 
@@ -268,6 +313,20 @@
             } catch (error) {
                 console.error('Error:', error);
                 DOMModule.showToast('Error sending message', 'danger');
+            }
+        }
+
+        async function handleSearch(event) {
+            event.preventDefault();
+            const searchText = DOMModule.elements.searchInput.value.trim();
+            if (!searchText) return;
+
+            try {
+                const results = await APIModule.searchMessages(searchText);
+                DOMModule.updateSearchResults(results);
+            } catch (error) {
+                console.error('Error:', error);
+                DOMModule.showToast('Error searching messages', 'danger');
             }
         }
 
@@ -317,6 +376,14 @@
                 } else if (event.target.classList.contains('delete-message')) {
                     handleDeleteClick(messageId);
                 }
+            });
+
+            // Search form
+            DOMModule.elements.searchForm.addEventListener('submit', handleSearch);
+
+            // Clear search
+            DOMModule.elements.clearSearchBtn.addEventListener('click', () => {
+                DOMModule.clearSearch();
             });
         }
 

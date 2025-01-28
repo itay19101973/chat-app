@@ -106,3 +106,30 @@ exports.getUserDetails = (req, res) => {
         userId: req.session.userId
     });
 }
+
+
+exports.findMessages = async function(req, res) {
+    try {
+        const msgText = req.params.msgText;
+        const { Op } = require('sequelize');
+
+        const messages = await Message.findAll({
+            where: {
+                content: {
+                    [Op.like]: `%${msgText}%`
+                }
+            },
+            include: [{
+                model: User,
+                attributes: ['id', 'firstName']
+            }],
+            order: [['createdAt', 'DESC']],
+            limit: 20 // Limit results to prevent overwhelming response
+        });
+
+        res.json(messages);
+    } catch (error) {
+        console.error('Error searching messages:', error);
+        res.status(500).json({ success: false, message: 'Error searching messages' });
+    }
+};
