@@ -5,7 +5,7 @@
 
         async function initializeSession() {
             try {
-                const response = await fetch('/messages-api/session');
+                const response = await fetch('/messages-api/userDetails');
                 if (!response.ok) throw new Error(response.statusText);
 
                 const sessionData = await response.json();
@@ -85,7 +85,7 @@
         }
 
         function renderMessage(message, currentUser) {
-            const isOwnMessage = message.email === currentUser.email;
+            const isOwnMessage = message.userId === currentUser.userId;
 
             return `
                 <div class="message mb-3 ${isOwnMessage ? 'text-end' : ''}" data-message-id="${message.id}">

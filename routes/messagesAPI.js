@@ -13,7 +13,7 @@ router.patch('/messages/:id', messagesController.updateMessage);
 router.delete('/messages/:id', messagesController.deleteMessage);
 
 // In messagesAPI.js (routes)
-router.get('/session', messagesController.getSession);
+router.get('/userDetails', messagesController.getUserDetails);
 
 
 

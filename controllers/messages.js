@@ -73,10 +73,9 @@ exports.deleteMessage = async function(req, res) {
     }
 }
 
-exports.getSession = (req, res) => {
+exports.getUserDetails = (req, res) => {
     res.json({
         userName: req.session.userName,
-        email: req.session.email,
         userId: req.session.userId
     });
 }
