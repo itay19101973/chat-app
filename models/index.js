@@ -3,8 +3,8 @@ const User = require('./User');
 const Message = require('./Message');
 
 // Define associations
-User.hasMany(Message);
-Message.belongsTo(User);
+Message.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Message, { foreignKey: 'userId' });
 
 // Sync all models
 async function syncDatabase() {

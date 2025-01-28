@@ -18,7 +18,8 @@ exports.addMessage = async function (req, res) {
         const newMessage = await Message.create({
             content: content,
             userName: req.session.userName,
-            email: req.session.email
+            email: req.session.email,
+            userId: req.session.userId
         });
         res.json(newMessage);
     } catch (error) {
@@ -37,7 +38,7 @@ exports.updateMessage = async function(req, res) {
             return res.status(404).json({ success: false, message: 'Message not found' });
         }
 
-        if (message.email !== req.session.email) {
+        if (message.userId !== req.session.userId) {
             return res.status(403).json({ success: false, message: 'Unauthorized to update this message' });
         }
 
@@ -60,7 +61,7 @@ exports.deleteMessage = async function(req, res) {
             return res.status(404).json({ success: false, message: 'Message not found' });
         }
 
-        if (message.email !== req.session.email) {
+        if (message.userId !== req.session.userId) {
             return res.status(403).json({ success: false, message: 'Unauthorized to delete this message' });
         }
 
@@ -75,6 +76,7 @@ exports.deleteMessage = async function(req, res) {
 exports.getSession = (req, res) => {
     res.json({
         userName: req.session.userName,
-        email: req.session.email
+        email: req.session.email,
+        userId: req.session.userId
     });
 }

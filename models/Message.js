@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./database');
+const User = require('../models/User.js');
 
 const Message = sequelize.define('Message', {
     id: {
@@ -23,6 +24,14 @@ const Message = sequelize.define('Message', {
         allowNull: false,
         validate: {
             isEmail: true
+        }
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id'
         }
     }
 }, {
