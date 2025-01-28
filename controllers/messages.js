@@ -41,7 +41,7 @@ exports.updateMessage = async function(req, res) {
             return res.status(404).json({ success: false, message: 'Message not found' });
         }
 
-        if (message.userId !== req.session.userId) {
+        if (message.UserId !== req.session.userId) {
             return res.status(403).json({ success: false, message: 'Unauthorized to update this message' });
         }
 
@@ -64,7 +64,7 @@ exports.deleteMessage = async function(req, res) {
             return res.status(404).json({ success: false, message: 'Message not found' });
         }
 
-        if (message.userId !== req.session.userId) {
+        if (message.UserId !== req.session.userId) {
             return res.status(403).json({ success: false, message: 'Unauthorized to delete this message' });
         }
 
