@@ -1,9 +1,31 @@
 // controllers/messages.js
 const Message = require("../models/Message");
 const User = require("../models/User");
+const {where} = require("sequelize");
 
 exports.getAllMessages = async function (req, res) {
     try {
+        let latestMessage = await Message.findAll({
+            order: [["updatedAt", "DESC"]],
+            limit: 1
+        });
+
+        if (latestMessage.length === 0) {
+            return res.status(204).json({ message: 'no update needed' });
+        }
+
+        latestMessage = latestMessage[0];
+
+        // Compare with session value
+        if (latestMessage.updatedAt.toISOString() === req.session.lastUpdated) {
+            console.log("No updated messages available");
+            return res.status(204).json({ message: 'No update required' });
+        }
+
+        // Update session value
+        req.session.lastUpdated = latestMessage.updatedAt;
+
+        // Fetch all messages
         const messages = await Message.findAll({
             include: [{
                 model: User,
@@ -11,11 +33,13 @@ exports.getAllMessages = async function (req, res) {
             }],
             order: [['createdAt', 'ASC']]
         });
-        res.json(messages);
+
+        res.json(messages); // Return the messages
     } catch (error) {
+        console.error('Error fetching messages:', error); // Log the error to help debug
         res.status(500).json({ success: false, message: 'Error fetching messages' });
     }
-}
+};
 
 exports.addMessage = async function (req, res) {
     try {

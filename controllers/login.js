@@ -39,6 +39,7 @@ exports.handleUserLogin = async (req, res) => {
             req.session.loggedIn = true;
             req.session.userName = user.firstName;
             req.session.userId = user.id;
+            req.session.lastUpdated = "";
             res.redirect('/chat');
         } else {
             res.render('login', {

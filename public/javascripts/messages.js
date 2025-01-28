@@ -181,6 +181,10 @@
             // Check if redirect is needed (invalid session)
             if (await handleRedirect(response)) return;
 
+            if (response.status === 204) {
+                return response;
+            }
+
             if (!response.ok) throw new Error('Failed to fetch messages');
             return response.json();
         }
@@ -327,8 +331,14 @@
 
         async function refreshMessages() {
             try {
-                const messages = await APIModule.fetchMessages();
-                DOMModule.updateMessagesUI(messages);
+                const res = await APIModule.fetchMessages();
+
+                if(res.status === 204)
+                {
+                    return;
+                }
+
+                DOMModule.updateMessagesUI(res);
             } catch (error) {
                 DOMModule.showToast('Error loading messages', 'danger');
 
