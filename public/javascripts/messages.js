@@ -161,42 +161,74 @@
         };
     })();
 
-    // API Module
     const APIModule = (function () {
+        // Handle the case when the session is not valid and redirect is needed
+        async function handleRedirect(response) {
+            if (response.status === 401) {
+                const data = await response.json();
+                if (data.redirect) {
+                    window.location.href = data.redirect;  // Perform client-side redirect
+                    return true;  // Indicate that redirect happened
+                }
+            }
+            return false;  // No redirect needed
+        }
+
+        // Fetch messages from the API
         async function fetchMessages() {
             const response = await fetch('/messages-api/messages');
+
+            // Check if redirect is needed (invalid session)
+            if (await handleRedirect(response)) return;
+
             if (!response.ok) throw new Error('Failed to fetch messages');
             return response.json();
         }
 
+        // Send a new message to the API
         async function sendMessage(message) {
             const response = await fetch('/messages-api/send-message', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
             });
+
+            // Check if redirect is needed (invalid session)
+            if (await handleRedirect(response)) return;
+
             if (!response.ok) throw new Error('Failed to send message');
             return response.json();
         }
 
+        // Update an existing message in the API
         async function updateMessage(messageId, newContent) {
             const response = await fetch(`/messages-api/messages/${messageId}`, {
                 method: 'PATCH',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: newContent})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: newContent })
             });
+
+            // Check if redirect is needed (invalid session)
+            if (await handleRedirect(response)) return;
+
             if (!response.ok) throw new Error('Failed to update message');
             return response.json();
         }
 
+        // Delete a message from the API
         async function deleteMessage(messageId) {
             const response = await fetch(`/messages-api/messages/${messageId}`, {
                 method: 'DELETE'
             });
+
+            // Check if redirect is needed (invalid session)
+            if (await handleRedirect(response)) return;
+
             if (!response.ok) throw new Error('Failed to delete message');
             return response.json();
         }
 
+        // Expose public API methods
         return {
             fetchMessages,
             sendMessage,
@@ -298,8 +330,8 @@
                 const messages = await APIModule.fetchMessages();
                 DOMModule.updateMessagesUI(messages);
             } catch (error) {
-                console.error('Error:', error);
                 DOMModule.showToast('Error loading messages', 'danger');
+
             }
         }
 

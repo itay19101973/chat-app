@@ -22,9 +22,10 @@ exports.checkEmailAvailability = async (req, res, next) => {
     }
 };
 
-exports.checkSession = (req, res, next) =>{
-    if(!req.session.loggedIn){
-        res.redirect('/login');
+exports.checkSession = (req, res, next) => {
+    if (!req.session.loggedIn) {
+        return res.status(401).json({ redirect: '/' });
+    } else {
+        next();
     }
-    next();
-}
+};
