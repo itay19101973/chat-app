@@ -11,15 +11,15 @@ router.get('/', checkLoggedIn, loginController.getLoginPage);
 
 router.get('/logout', loginController.logout)
 
-router.get('/login', loginController.getLoginPage);
+router.get('/login', checkLoggedIn, loginController.getLoginPage);
 
 router.post('/login' ,loginController.handleUserLogin )
 
 router.get('/about', aboutController.getAboutModal);
 
-router.get('/register', registerController.getRegisterPage);
+router.get('/register',checkLoggedIn, registerController.getRegisterPage);
 
-router.get('/register-password', checkEmailAvailability, registerController.getPasswordPage);
+router.get('/register-password',checkLoggedIn, checkEmailAvailability, registerController.getPasswordPage);
 
 router.post('/register', registerController.handleUserRegistration)
 
