@@ -1,3 +1,4 @@
+(() => {
 document.addEventListener('DOMContentLoaded', () => {
     const formValidator = (() => {
         const password = document.getElementById('password');
@@ -76,3 +77,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize form handling after DOM content is loaded
     formHandler.init();
 });
+})();

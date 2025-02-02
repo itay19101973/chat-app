@@ -1,3 +1,4 @@
+(() => {
 document.addEventListener('DOMContentLoaded', () => {
     const formValidator = (() => {
         const email = document.getElementById('email');
@@ -85,3 +86,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     formHandler.init();
 });
+})();
