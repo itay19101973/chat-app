@@ -1,8 +1,28 @@
+/**
+ * Defines the 'User' model for the database.
+ *
+ * The 'User' model represents users in the system with personal information and associated messages.
+ * The model is defined using Sequelize ORM with validation for user fields and associations to messages.
+ *
+ * @module UserModel
+ */
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('./database');
 const Message = require('./Message');
 
-
+/**
+ * The User model defines the structure of the 'User' table in the database.
+ *
+ * @typedef {Object} User
+ * @property {number} id - The unique identifier for the user (auto-incremented).
+ * @property {string} firstName - The user's first name.
+ * @property {string} lastName - The user's last name.
+ * @property {string} email - The user's email (unique).
+ * @property {string} password - The user's hashed password (bcrypt).
+ *
+ * @see sequelize.define
+ */
 const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
