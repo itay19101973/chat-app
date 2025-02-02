@@ -234,7 +234,7 @@
                 throw new Error(res.statusText);
             }
 
-            return res.json();
+            return await res.json();
 
         }
 
@@ -323,7 +323,8 @@
             sendMessage,
             updateMessage,
             deleteMessage,
-            searchMessages
+            searchMessages,
+            checkUpdate
         };
     })();
 
@@ -442,13 +443,21 @@
 
         async function pollMessages()
         {
-            let currentUpdate = APIModule.checkUpdate();
+            try{
+                let currentUpdate =  new Date(await APIModule.checkUpdate());
 
-            if(lastUpdated < currentUpdate)
-            {
-                lastUpdated = currentUpdate;
-                await refreshMessages();
+                console.log(currentUpdate);
+                if(lastUpdated < currentUpdate)
+                {
+                    lastUpdated = currentUpdate;
+                    await refreshMessages();
+                }
             }
+            catch (error)
+            {
+                console.error(error.message);
+            }
+
         }
 
         async function refreshMessages() {
@@ -464,7 +473,7 @@
         }
 
         function startPolling(interval = POLLING_INTERVAL) {
-            setInterval(refreshMessages, interval);
+            setInterval(pollMessages, interval);
         }
 
         async function initialize() {

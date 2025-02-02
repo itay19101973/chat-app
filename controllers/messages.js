@@ -3,8 +3,25 @@ const Message = require("../models/Message");
 const User = require("../models/User");
 // TODO : DELETED MESSAGE NOT DELETED - ADD PARANOID MODE AND ADD FUNCTIONALITY THAT CHECKS THAT
 
-exports.getUpdatedDate = async function (req, res){
+exports.getUpdatedDate = function (req, res){
+    Message.findAll({
+        attributes: ['createdAt','updatedAt','deletedAt'],
+        paranoid: false,
+    }).then(messages => {
+        let newestDate = null;
 
+        messages.forEach(row => {
+            const { createdAt, updatedAt, deletedAt } = row.dataValues;
+            [createdAt, updatedAt, deletedAt].forEach(date => {
+                if (date && (!newestDate || date > newestDate)) {
+                    newestDate = date;
+                }
+            });
+        });
+        res.status(200).json(newestDate);
+    }).catch(err => {
+        res.status(500).json({err});
+    });
 }
 
 exports.getAllMessages = async function (req, res) {

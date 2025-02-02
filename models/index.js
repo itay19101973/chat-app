@@ -9,7 +9,7 @@ async function syncDatabase() {
     try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
-        await sequelize.sync();
+        await sequelize.sync({force : true});
         // Sync the session store
         myStore.sync();
         console.log('All models were synchronized successfully.');
