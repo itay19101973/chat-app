@@ -18,6 +18,8 @@ router.get('/userDetails',checkSession, messagesController.getUserDetails);
 
 router.get('/search/:msgText',checkSession, messagesController.findMessages)
 
+router.get('get-updated-date', checkSession, messagesController.getUpdatedDate);
+
 
 
 module.exports = router;

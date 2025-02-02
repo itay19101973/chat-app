@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./database');
-const User = require('../models/User.js');
 
 const Message = sequelize.define('Message', {
     id: {
@@ -16,7 +15,8 @@ const Message = sequelize.define('Message', {
         }
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    paranoid: true
 });
 
 module.exports = Message;

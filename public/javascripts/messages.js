@@ -225,6 +225,19 @@
     })();
 
     const APIModule = (function () {
+        async function checkUpdate()
+        {
+            const res = await fetch('/messages-api/get-updated-date');
+
+            if(!res.ok)
+            {
+                throw new Error(res.statusText);
+            }
+
+            return res.json();
+
+        }
+
         // Handle the case when the session is not valid and redirect is needed
         async function handleRedirect(response) {
             if (response.status === 401) {
@@ -423,15 +436,25 @@
     // Main Controller Module
     const MessageController = (function () {
         const POLLING_INTERVAL = 10000;
+        let lastUpdated =  Date.now();
+
+
+
+        async function pollMessages()
+        {
+            let currentUpdate = APIModule.checkUpdate();
+
+            if(lastUpdated < currentUpdate)
+            {
+                lastUpdated = currentUpdate;
+                await refreshMessages();
+            }
+        }
 
         async function refreshMessages() {
             try {
-                const res = await APIModule.fetchMessages();
 
-                if(res.status === 204)
-                {
-                    return;
-                }
+                const res = await APIModule.fetchMessages();
 
                 DOMModule.updateMessagesUI(res);
             } catch (error) {
