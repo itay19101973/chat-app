@@ -5,26 +5,6 @@ const {where} = require("sequelize");
 // TODO : DELETED MESSAGE NOT DELETED - ADD PARANOID MODE AND ADD FUNCTIONALITY THAT CHECKS THAT
 exports.getAllMessages = async function (req, res) {
     try {
-        let latestMessage = await Message.findAll({
-            order: [["updatedAt", "DESC"]],
-            limit: 1
-        });
-
-        if (latestMessage.length === 0) {
-            return res.status(204).json({ message: 'no update needed' });
-        }
-
-        latestMessage = latestMessage[0];
-
-        // Compare with session value
-        if (latestMessage.updatedAt.toISOString() === req.session.lastUpdated) {
-            console.log("No updated messages available");
-            return res.status(204).json({ message: 'No update required' });
-        }
-
-        // Update session value
-        req.session.lastUpdated = latestMessage.updatedAt;
-
         // Fetch all messages
         const messages = await Message.findAll({
             include: [{
