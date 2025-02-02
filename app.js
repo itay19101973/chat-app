@@ -3,11 +3,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
+
 var authenticationRoutes = require('./routes/authRoutes');
 var chatRoutes = require('./routes/chatRoutes');
 var messagesAPI = require('./routes/messagesAPI');
 var app = express();
-const { syncDatabase } = require('./models');
+const { syncDatabase, myStore } = require('./models');
 const createError = require('http-errors');
 
 
@@ -18,12 +19,13 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// Enable sessions
 app.use(session({
-    secret:"somesecretkey",
-
-    resave: false, // Force save of session for each request
-    saveUninitialized: false, // Save a session that is new, but has not been modified
-    cookie: {maxAge: 10*60*1000 } // milliseconds!
+    secret: 'somesecretkey',
+    store: myStore, // default is memory store
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+    cookie: { maxAge: 20 * 60 * 1000 } // milliseconds
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -61,6 +63,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 3002;
 app.listen(port);
 module.exports = app;

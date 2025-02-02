@@ -2,7 +2,7 @@
 <html lang="en">
 <%- include('includes/head') %>
 <body class="bg-gradient">
-<%- include('includes/navigation') %>
+<%- include('includes/login-navigation') %>
 <div class="container-fluid py-5 bg-light min-vh-100">
     <div class="row justify-content-center">
         <div class="col-xl-8 col-lg-10">
@@ -34,6 +34,16 @@
                     </div>
                     <!-- Messages Container -->
                     <div class="messages-container mb-4 bg-light rounded-3 p-3 border" style="height: 400px; overflow-y: auto;">
+                        <% if (typeof messages !== 'undefined' && messages.length > 0) { %>
+                            <% messages.forEach(message => { %>
+                                <div class="message mb-3 <%= message.sender === userName ? 'text-end' : '' %>">
+                                    <small class="text-muted"><%= message.sender %> - <%= message.timestamp %></small>
+                                    <div class="message-content p-2 rounded <%= message.sender === userName ? 'bg-primary text-white' : 'bg-light' %>">
+                                        <%= message.text %>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
                     </div>
                     <!-- Message Input Form -->
                     <form id="messageForm" class="mt-4">
