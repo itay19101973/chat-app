@@ -6,6 +6,19 @@ const { validateEmail, validateName } = require('./users');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+/**
+ * Handles user registration, including validation, password hashing, and saving to the database.
+ * Clears session and redirects to the login page if successful, or renders the appropriate error message if not.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body containing user details.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {string} req.body.firstName - The first name of the user.
+ * @param {string} req.body.lastName - The last name of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {void} Redirects to the login page or renders the error message.
+ */
 exports.handleUserRegistration = async (req, res) => {
     const endSessionE = "Your session has ended, please try again.";
     let { email, firstName, lastName, password } = req.body;
@@ -63,6 +76,13 @@ exports.handleUserRegistration = async (req, res) => {
     }
 };
 
+/**
+ * Renders the user registration page with pre-filled user info from cookies if available.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Renders the register page with or without pre-filled user data.
+ */
 exports.getRegisterPage = (req, res) => {
     const cookies = new Cookies(req, res, { keys: keys });
     let userInfo = cookies.get('userInfo');
@@ -80,6 +100,18 @@ exports.getRegisterPage = (req, res) => {
     }
 };
 
+/**
+ * Renders the password page during user registration, saving user details to cookies for future use.
+ * If the necessary parameters are not present, redirects to the register page.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The request query containing user details.
+ * @param {string} req.query.email - The email address of the user.
+ * @param {string} req.query.firstName - The first name of the user.
+ * @param {string} req.query.lastName - The last name of the user.
+ * @param {Object} res - The response object.
+ * @returns {void} Renders the password page or redirects to the register page.
+ */
 exports.getPasswordPage = (req, res, next) => {
     const { email, firstName, lastName } = req.query;
 
