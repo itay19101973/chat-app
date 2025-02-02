@@ -1,7 +1,7 @@
 // controllers/messages.js
 const Message = require("../models/Message");
 const User = require("../models/User");
-// TODO : DELETED MESSAGE NOT DELETED - ADD PARANOID MODE AND ADD FUNCTIONALITY THAT CHECKS THAT
+
 
 exports.getUpdatedDate = function (req, res){
     Message.findAll({

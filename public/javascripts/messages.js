@@ -1,8 +1,24 @@
 (() => {
-    // State Management Module
+
+    let lastUpdated =  Date.now();
+
+    /**
+     * StateManager Module
+     * Manages the current user session state, including fetching and storing user details.
+     * Exposes methods to initialize a user session and retrieve the current user.
+     */
     const StateManager = (function () {
         let currentUser = null;
+        const userDetailsError = 'Error fetching user detailes:';
 
+
+        /**
+         * Initializes the user session by fetching user details from the API.
+         * Makes an asynchronous request to fetch user details from '/messages-api/userDetails'.
+         * On success, it updates the `currentUser` with the session data.
+         * On failure, it logs an error message.
+         * @returns {Promise<void>} A promise that resolves when the session is initialized.
+         */
         async function initializeSession() {
             try {
                 const response = await fetch('/messages-api/userDetails');
@@ -11,7 +27,7 @@
                 const sessionData = await response.json();
                 currentUser = sessionData;
             } catch (error) {
-                console.error('Error fetching session:', error);
+                console.error(userDetailsError, error);
             }
         }
 
@@ -25,8 +41,12 @@
         };
     })();
 
-    // DOM Module
+    /**
+     * DOMModule - Responsible for interacting with the DOM, managing search results, messages, modals, and notifications.
+     */
     const DOMModule = (function () {
+
+        // Cache DOM elements
         const elements = {
             messageForm: document.querySelector('#messageForm'),
             messageInput: document.querySelector('input[name="message"]'),
@@ -37,7 +57,12 @@
             searchResultsContainer: document.querySelector('.search-results-container'),
             clearSearchBtn: document.querySelector('#clearSearch')
         };
-
+        /**
+         * Renders a single search result for a message.
+         * @param {object} message - The message object containing the content and user details.
+         * @param {object} currentUser - The current user's details.
+         * @returns {string} - The HTML string for a search result.
+         */
         function renderSearchResult(message, currentUser) {
             return `
             <div class="search-result p-3 border-bottom hover-shadow transition-all" 
@@ -63,6 +88,11 @@
         `;
         }
 
+
+        /**
+         * Updates the UI with search results based on the provided messages.
+         * @param {Array} messages - List of message objects to display in the search results.
+         */
         function updateSearchResults(messages) {
             const currentUser = StateManager.getCurrentUser();
             if (messages.length === 0) {
@@ -75,11 +105,19 @@
             elements.searchResults.classList.remove('d-none');
         }
 
+
+        /**
+         * Clears the search input and hides the search results.
+         */
         function clearSearch() {
             elements.searchInput.value = '';
             elements.searchResults.classList.add('d-none');
         }
 
+
+        /**
+         * Creates and appends modal HTML for editing and deleting messages.
+         */
         function createModals() {
             // Create edit modal HTML
             const editModalHTML = `
@@ -131,6 +169,13 @@
             this.deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         }
 
+
+        /**
+         * Renders a single message in the UI.
+         * @param {object} message - The message object containing content, user details, and ID.
+         * @param {object} currentUser - The current user's details to differentiate their messages.
+         * @returns {string} - The HTML string for a message.
+         */
         function renderMessage(message, currentUser) {
             const isOwnMessage = message.User.id === currentUser.userId;
 
@@ -163,6 +208,11 @@
 </div>`;
         }
 
+
+        /**
+         * Updates the message container with new messages and scrolls to the bottom.
+         * @param {Array} messages - List of message objects to render in the container.
+         */
         function updateMessagesUI(messages) {
             const currentUser = StateManager.getCurrentUser();
             elements.messagesContainer.innerHTML = messages
@@ -171,10 +221,20 @@
             scrollToBottom();
         }
 
+
+        /**
+         * Scrolls the message container to the bottom.
+         */
         function scrollToBottom() {
             elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
         }
 
+
+        /**
+         * Shows a toast notification with a custom message.
+         * @param {string} message - The notification message.
+         * @param {string} [type='success'] - The type of notification ('success', 'danger', etc.).
+         */
         function showToast(message, type = 'success') {
             const toastHTML = `
                 <div class="toast-container position-fixed top-0 end-0 p-3">
@@ -201,10 +261,19 @@
             });
         }
 
+
+        /**
+         * Clears the message input field.
+         */
         function clearMessageInput() {
             elements.messageInput.value = '';
         }
 
+
+        /**
+         * Retrieves the current value of the message input field.
+         * @returns {string} - The trimmed message input value.
+         */
         function getMessageInput() {
             return elements.messageInput.value.trim();
         }
@@ -218,7 +287,6 @@
             showToast,
             clearMessageInput,
             getMessageInput,
-            scrollToBottom,
             editModal: null,
             deleteModal: null
         };
@@ -328,21 +396,46 @@
         };
     })();
 
-    // Event Handler Module
+    /**
+     * EventHandlerModule handles all event-driven logic for the chat application,
+     * including submitting messages, editing, deleting, searching, and initializing event listeners.
+     */
     const EventHandlerModule = (function () {
         let currentEditMessageId = null;
 
+
+        /**
+         * Handles the click event for editing a message.
+         * Populates the edit modal with the message content and shows the modal.
+         *
+         * @param {string} messageId - The ID of the message to edit.
+         * @param {string} content - The content of the message to populate in the edit field.
+         */
         function handleEditClick(messageId, content) {
             currentEditMessageId = messageId;
             document.getElementById('editMessageText').value = content;
             DOMModule.editModal.show();
         }
 
+        /**
+         * Handles the click event for deleting a message.
+         * Opens the delete confirmation modal for the selected message.
+         *
+         * @param {string} messageId - The ID of the message to delete.
+         */
         function handleDeleteClick(messageId) {
             currentEditMessageId = messageId;
             DOMModule.deleteModal.show();
         }
 
+
+        /**
+         * Handles the form submission for sending a new message.
+         * Sends the message to the API, clears the input field, and refreshes the message list.
+         *
+         * @param {Event} event - The form submission event.
+         * @returns {Promise<void>}
+         */
         async function handleSubmit(event) {
             event.preventDefault();
             const message = DOMModule.getMessageInput();
@@ -352,12 +445,21 @@
                 await APIModule.sendMessage(message);
                 DOMModule.clearMessageInput();
                 await MessageController.refreshMessages();
+                lastUpdated =  Date.now();
             } catch (error) {
                 console.error('Error:', error);
                 DOMModule.showToast('Error sending message', 'danger');
             }
         }
 
+
+        /**
+         * Handles the form submission for searching messages.
+         * Sends the search query to the API and updates the UI with the search results.
+         *
+         * @param {Event} event - The form submission event.
+         * @returns {Promise<void>}
+         */
         async function handleSearch(event) {
             event.preventDefault();
             const searchText = DOMModule.elements.searchInput.value.trim();
@@ -372,6 +474,11 @@
             }
         }
 
+
+        /**
+         * Initializes event listeners for the form submissions, edit, delete, and search actions.
+         * Registers event listeners on the DOM elements to handle user interaction.
+         */
         function initializeEventListeners() {
             // Form submission
             DOMModule.elements.messageForm.addEventListener('submit', handleSubmit);
@@ -384,6 +491,7 @@
                         await APIModule.updateMessage(currentEditMessageId, newText);
                         DOMModule.editModal.hide();
                         await MessageController.refreshMessages();
+                        lastUpdated = Date.now();
                         DOMModule.showToast('Message updated successfully');
                     } catch (error) {
                         DOMModule.showToast('Error updating message', 'danger');
@@ -398,6 +506,7 @@
                         await APIModule.deleteMessage(currentEditMessageId);
                         DOMModule.deleteModal.hide();
                         await MessageController.refreshMessages();
+                        lastUpdated = Date.now();
                         DOMModule.showToast('Message deleted successfully');
                     } catch (error) {
                         DOMModule.showToast('Error deleting message', 'danger');
@@ -434,13 +543,21 @@
         };
     })();
 
-    // Main Controller Module
+    /**
+     * MessageController is responsible for handling message fetching, refreshing,
+     * and polling for new messages in the chat application.
+     */
     const MessageController = (function () {
         const POLLING_INTERVAL = 10000;
-        let lastUpdated =  Date.now();
 
 
 
+        /**
+         * Polls the server to check for message updates.
+         * If a newer update exists, refreshes the messages.
+         *
+         * @returns {Promise<void>}
+         */
         async function pollMessages()
         {
             try{
@@ -460,6 +577,11 @@
 
         }
 
+        /**
+         * Fetches messages from the API and updates the UI.
+         *
+         * @returns {Promise<void>}
+         */
         async function refreshMessages() {
             try {
 
@@ -472,10 +594,21 @@
             }
         }
 
+        /**
+         * Starts polling the server for new messages at the specified interval.
+         *
+         * @param {number} [interval=POLLING_INTERVAL] - The interval in milliseconds between polls.
+         */
         function startPolling(interval = POLLING_INTERVAL) {
             setInterval(pollMessages, interval);
         }
 
+        /**
+         * Initializes the chat application.
+         * Sets up session state, initializes the DOM and event listeners, and starts polling for messages.
+         *
+         * @returns {Promise<void>}
+         */
         async function initialize() {
             await StateManager.initializeSession();
             DOMModule.createModals();
